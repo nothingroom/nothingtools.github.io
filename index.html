@@ -125,8 +125,20 @@ j=d.createElement(s),dl=l!='dataLayer'?'&l='+l:'';j.async=true;j.src=
         #t-icon { color: var(--text) !important;transition: transform .3s ease; } 
         .t-toggle:active #t-icon { transform: rotate(150deg) scale(1.1); }
 
-        .bento { display: grid; grid-template-columns: repeat(2, 1fr); gap: 15px; max-width: 1000px; margin: 0 auto; padding: 0 20px 20px; }
-        @media (min-width: 768px) { .bento { grid-template-columns: repeat(3, 1fr); } }
+/* 1. Yahan se .bento hata diya (sirf footer aur screen rehne do) */
+footer, .screen { content-visibility: auto; contain-intrinsic-size: 1000px; }
+
+/* 2. Bento mein padding-top add kiya taaki animation na kate */
+.bento { 
+    display: grid; 
+    grid-template-columns: repeat(2, 1fr); 
+    gap: 15px; 
+    max-width: 1000px; 
+    margin: 0 auto; 
+    padding: 20px;
+    overflow: visible;
+}    
+      @media (min-width: 768px) { .bento { grid-template-columns: repeat(3, 1fr); } }
 
         .tile { 
             background: var(--card); border: 1px solid var(--border); border-radius: 35px; padding: 25px; cursor: pointer; transition: var(--transition);
