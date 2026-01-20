@@ -1,25 +1,20 @@
 <!DOCTYPE html>
 <html lang="en" data-theme="light">
 <head>
-  <script async src="https://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js?client=ca-pub-1607055557776596"
-     crossorigin="anonymous"></script>
+  <script async src="https://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js?client=ca-pub-1607055557776596" crossorigin="anonymous"></script>
   <meta name="google-site-verification" content="ZWidhp29xotLZ2B8B4mHHEtWvixWj6HhA9Uaav06BYA" />
-  <!-- Google Tag Manager -->
-<script>(function(w,d,s,l,i){w[l]=w[l]||[];w[l].push({'gtm.start':
-new Date().getTime(),event:'gtm.js'});var f=d.getElementsByTagName(s)[0],
-j=d.createElement(s),dl=l!='dataLayer'?'&l='+l:'';j.async=true;j.src=
-'https://www.googletagmanager.com/gtm.js?id='+i+dl;f.parentNode.insertBefore(j,f);
-})(window,document,'script','dataLayer','GTM-N3QQWX28');</script>
-<!-- End Google Tag Manager -->
-  <!-- Google tag (gtag.js) -->
-<script async src="https://www.googletagmanager.com/gtag/js?id=G-H423N499KV"></script>
-<script>
-  window.dataLayer = window.dataLayer || [];
-  function gtag(){dataLayer.push(arguments);}
-  gtag('js', new Date());
-
-  gtag('config', 'G-H423N499KV');
-</script>
+  <script>(function(w,d,s,l,i){w[l]=w[l]||[];w[l].push({'gtm.start':
+  new Date().getTime(),event:'gtm.js'});var f=d.getElementsByTagName(s)[0],
+  j=d.createElement(s),dl=l!='dataLayer'?'&l='+l:'';j.async=true;j.src=
+  'https://www.googletagmanager.com/gtm.js?id='+i+dl;f.parentNode.insertBefore(j,f);
+  })(window,document,'script','dataLayer','GTM-N3QQWX28');</script>
+  <script async src="https://www.googletagmanager.com/gtag/js?id=G-H423N499KV"></script>
+  <script>
+    window.dataLayer = window.dataLayer || [];
+    function gtag(){dataLayer.push(arguments);}
+    gtag('js', new Date());
+    gtag('config', 'G-H423N499KV');
+  </script>
     <meta charset="UTF-8">
   <meta name="google-adsense-account" content="ca-pub-1607055557776596">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
@@ -124,20 +119,18 @@ j=d.createElement(s),dl=l!='dataLayer'?'&l='+l:'';j.async=true;j.src=
         #t-icon { color: var(--text) !important;transition: transform .3s ease; } 
         .t-toggle:active #t-icon { transform: rotate(150deg) scale(1.1); }
 
-/* 1. Yahan se .bento hata diya (sirf footer aur screen rehne do) */
-footer, .screen { content-visibility: auto; contain-intrinsic-size: 1000px; }
+        footer, .screen { content-visibility: auto; contain-intrinsic-size: 1000px; }
 
-/* 2. Bento mein padding-top add kiya taaki animation na kate */
-.bento { 
-    display: grid; 
-    grid-template-columns: repeat(2, 1fr); 
-    gap: 15px; 
-    max-width: 1000px; 
-    margin: 0 auto; 
-    padding: 20px;
-    overflow: visible;
-}    
-      @media (min-width: 768px) { .bento { grid-template-columns: repeat(3, 1fr); } }
+        .bento { 
+            display: grid; 
+            grid-template-columns: repeat(2, 1fr); 
+            gap: 15px; 
+            max-width: 1000px; 
+            margin: 0 auto; 
+            padding: 20px;
+            overflow: visible;
+        }    
+        @media (min-width: 768px) { .bento { grid-template-columns: repeat(3, 1fr); } }
 
         .tile { 
             background: var(--card); border: 1px solid var(--border); border-radius: 35px; padding: 25px; cursor: pointer; transition: var(--transition);
@@ -147,7 +140,7 @@ footer, .screen { content-visibility: auto; contain-intrinsic-size: 1000px; }
         .tile:active { transform: scale(0.95); }
         .tile h2 { font-size: 2.2rem; position: relative; z-index: 2; }
         .tile p { opacity: 0.8 !important; font-size: 1rem; position: relative; z-index: 2; }
-                /* New Tile Icon Style */
+        
         .tile-icon {
             position: absolute;
             bottom: 15px;
@@ -163,8 +156,6 @@ footer, .screen { content-visibility: auto; contain-intrinsic-size: 1000px; }
 
         .full { grid-column: span 2; }
         @media (min-width: 768px) { .full { grid-column: span 1; } }
-        
-        
         
         /* ================= MODALS WITH BOUNCY ANIMATION ================= */
         .screen { 
@@ -244,14 +235,58 @@ footer, .screen { content-visibility: auto; contain-intrinsic-size: 1000px; }
         .dot-row { display: flex; gap: 2px; }
         .dot { width: 2.5px; height: 2.5px; background: var(--text); border-radius: 50%; }
 
-        /* ================= CHAT STYLES ================= */
+        /* ================= CHAT STYLES (UPDATED) ================= */
         .red-dot-loader { width: 12px; height: 12px; background-color: #ff0000; border-radius: 50%; display: inline-block; animation: pulse-red 0.8s ease-in-out infinite; }
         @keyframes pulse-red { 0% { transform: scale(0.8); box-shadow: 0 0 0 0 rgba(255, 0, 0, 0.7); } 70% { transform: scale(1.2); box-shadow: 0 0 0 10px rgba(255, 0, 0, 0); } 100% { transform: scale(0.8); box-shadow: 0 0 0 0 rgba(255, 0, 0, 0); } }
 
-        .msg-bubble { background: rgba(255,255,255,0.03); border: 1px solid var(--border); padding: 12px 15px; border-radius: 20px; position: relative; max-width: 85%; align-self: flex-start; margin-bottom: 10px; }
-        .u-badge { font-size: 0.7rem; background: var(--text); color: var(--bg); padding: 2px 8px; border-radius: 5px; margin-bottom: 5px; display: inline-block; }
+        .msg-bubble { 
+            background: rgba(255,255,255,0.03); 
+            border: 1px solid var(--border); 
+            padding: 12px 15px; 
+            border-radius: 20px; 
+            position: relative; 
+            max-width: 85%; 
+            align-self: flex-start; /* Default Left */
+            margin-bottom: 10px; 
+            display: flex;
+            flex-direction: column;
+        }
+        
+        /* SELF MESSAGE (Right Side) */
+        .msg-bubble.self {
+            align-self: flex-end; 
+            background: rgba(255, 255, 255, 0.1); 
+            border-color: var(--text);
+            text-align: right;
+        }
+        
+        .msg-bubble.self .u-badge {
+            align-self: flex-end;
+        }
+
+        .u-badge { font-size: 0.7rem; background: var(--text); color: var(--bg); padding: 2px 8px; border-radius: 5px; margin-bottom: 5px; display: inline-block; align-self: flex-start;}
         .admin-reply-box { margin-top: 10px; padding: 8px 12px; background: rgba(255, 0, 0, 0.05); border-left: 2px solid var(--accent); border-radius: 10px; font-size: 0.9rem; }
         .admin-tag { color: var(--accent); font-weight: bold; font-size: 0.7rem; display: block; margin-bottom: 2px; }
+
+        /* CHAT IMAGES */
+        .msg-img {
+            max-width: 100%;
+            border-radius: 12px;
+            margin-top: 5px;
+            margin-bottom: 5px;
+            border: 1px solid rgba(255,255,255,0.2);
+            cursor: pointer;
+        }
+
+        /* Preview Image (Input ke paas) */
+        #imgPreview {
+            display: none;
+            width: 40px; height: 40px;
+            object-fit: cover; border-radius: 8px;
+            margin-right: 10px;
+            border: 1px solid var(--accent);
+            cursor: pointer;
+        }
 
         /* ================= MUSIC UI ================= */
         .music-ui { text-align: center; }
@@ -312,10 +347,8 @@ footer, .screen { content-visibility: auto; contain-intrinsic-size: 1000px; }
     </style>
 </head>
 <body>
-  <!-- Google Tag Manager (noscript) -->
-<noscript><iframe src="https://www.googletagmanager.com/ns.html?id=GTM-N3QQWX28"
+  <noscript><iframe src="https://www.googletagmanager.com/ns.html?id=GTM-N3QQWX28"
 height="0" width="0" style="display:none;visibility:hidden"></iframe></noscript>
-<!-- End Google Tag Manager (noscript) -->
 <div class="stars-container" id="starField"></div>
     <div class="canvas"></div>
 
@@ -362,9 +395,19 @@ height="0" width="0" style="display:none;visibility:hidden"></iframe></noscript>
             <button class="close-icon" onclick="closeScreen('feedbackScr')" aria-label="Close Modal" style="background:transparent; border:none; color:var(--text);">×</button>
             <h2>COMMUNITY BOARD</h2>
             <p style="opacity: 0.4; font-size: 0.8rem; margin-bottom: 15px;">PUBLIC FEEDBACK & CHAT</p>
+            
             <div id="msgBoard" style="flex: 1; overflow-y: auto; padding: 10px; display: flex; flex-direction: column; gap: 15px; scroll-behavior: smooth;"></div>
+            
             <div style="background: var(--card); border: 1px solid var(--border); border-radius: 30px; padding: 5px 5px 5px 15px; display: flex; align-items: center; margin-top: 15px;">
+                <img id="imgPreview" src="" onclick="clearImage()" title="Click to remove">
+                
                 <input type="text" id="userMsg" placeholder="SHARE SUGGESTION..." aria-label="Type Message" style="flex: 1; background: transparent; border: none; color: var(--text); outline: none; font-family: 'VT323' !important; font-size: 1.2rem;">
+                
+                <input type="file" id="imgInput" accept="image/*" style="display: none;" onchange="handleFileSelect()">
+                <button onclick="document.getElementById('imgInput').click()" style="width: 40px; height: 40px; border-radius: 50%; background: transparent; color: var(--text); border: none; cursor: pointer; margin-right: 5px;">
+                    <i class="fa-solid fa-image"></i>
+                </button>
+
                 <button onclick="sendMsg()" aria-label="Send Message" style="width: 45px; height: 45px; border-radius: 50%; background: var(--text); color: var(--bg); border: none; cursor: pointer; display: flex; justify-content: center; align-items: center;">
                     <i class="fa-solid fa-arrow-up"></i>
                 </button>
@@ -1051,20 +1094,70 @@ height="0" width="0" style="display:none;visibility:hidden"></iframe></noscript>
             setTimeout(() => { btn.innerText = "DOWNLOAD"; btn.style.pointerEvents = "all"; }, 2000);
         }
 
-        /* ================= CHAT MODULE (FIXED) ================= */
+        /* ================= CHAT MODULE (UPDATED WITH IMAGE & ALIGNMENT) ================= */
         let userUUID = localStorage.getItem('ns_user_uuid');
         if (!userUUID) {
             userUUID = 'uid_' + Date.now().toString(36) + Math.random().toString(36).substr(2);
             localStorage.setItem('ns_user_uuid', userUUID);
         }
         let savedName = localStorage.getItem('ns_user_fixed') || "";
+        
+        // --- NEW: Image Handling ---
+        let selectedImgBase64 = "";
+
+        async function handleFileSelect() {
+            const fileInput = document.getElementById('imgInput');
+            const file = fileInput.files[0];
+            if (!file) return;
+
+            // 1. Verify Permission Check (Live Database Check)
+            try {
+                const res = await fetch("https://nothingcommunity-7664f-default-rtdb.firebaseio.com/verified_users.json");
+                const verifiedList = await res.json() || {};
+                
+                if (verifiedList[userUUID] !== true) {
+                    alert("🔒 ONLY VERIFIED USERS CAN SEND PHOTOS.");
+                    fileInput.value = ""; // Reset
+                    return;
+                }
+
+                // 2. Size Limit (1MB) taaki DB crash na ho
+                if (file.size > 1024 * 1024) {
+                     alert("⚠️ IMAGE TOO LARGE (MAX 1MB)");
+                     fileInput.value = "";
+                     return;
+                }
+
+                // 3. Convert to Base64
+                const reader = new FileReader();
+                reader.onload = function(e) {
+                    selectedImgBase64 = e.target.result;
+                    const preview = document.getElementById('imgPreview');
+                    preview.src = selectedImgBase64;
+                    preview.style.display = 'block';
+                };
+                reader.readAsDataURL(file);
+
+            } catch (e) {
+                alert("ERROR CHECKING PERMISSIONS");
+                fileInput.value = "";
+            }
+        }
+
+        function clearImage() {
+            document.getElementById('imgInput').value = "";
+            document.getElementById('imgPreview').style.display = 'none';
+            selectedImgBase64 = "";
+        }
 
         async function sendMsg() {
             const input = document.getElementById('userMsg');
-            const btn = document.querySelector('#feedbackScr button');
+            const btn = document.querySelector('#feedbackScr button:last-child');
             const msg = input.value.trim();
             
-            if (!msg) return;
+            // Allow sending if image exists even if text is empty
+            if (!msg && !selectedImgBase64) return;
+            
             if (msg === "/reset") {
                 localStorage.removeItem('ns_user_fixed'); savedName = "";
                 alert("NAME RESET!"); input.value = ""; return;
@@ -1084,9 +1177,19 @@ height="0" width="0" style="display:none;visibility:hidden"></iframe></noscript>
 
                 await fetch(DB_URL, { 
                     method: 'POST', headers: { 'Content-Type': 'application/json' }, 
-                    body: JSON.stringify({ userName: savedName, text: msg, reply: "", timestamp: Date.now(), uuid: userUUID, isVerified: false }) 
+                    body: JSON.stringify({ 
+                        userName: savedName, 
+                        text: msg, 
+                        image: selectedImgBase64, // Added Image
+                        reply: "", 
+                        timestamp: Date.now(), 
+                        uuid: userUUID, 
+                        isVerified: false 
+                    }) 
                 }); 
-                input.value = ""; await loadMessages(); 
+                input.value = ""; 
+                clearImage(); // Clear Image
+                await loadMessages(); 
             } catch (e) { alert("FAILED"); } finally { btn.disabled = false; btn.innerHTML = originalHTML; }
         }
 
@@ -1106,12 +1209,21 @@ height="0" width="0" style="display:none;visibility:hidden"></iframe></noscript>
                 board.innerHTML = messages.map(m => {
                     const isUserVerified = (m.uuid && verifiedData[m.uuid] === true);
                     const tickHtml = isUserVerified ? '<i class="fa-solid fa-circle-check" style="color:#1da1f2; margin-left:4px; font-size:0.8rem;"></i>' : '';
+                    
+                    // ALIGNMENT LOGIC
+                    const isMe = m.uuid === userUUID;
+                    const alignClass = isMe ? 'self' : '';
+
                     return `
-                    <div class="msg-bubble" style="user-select: none;" 
+                    <div class="msg-bubble ${alignClass}" style="user-select: none;" 
                          onmousedown="startPress('${m.id}', '${m.userName}', ${isUserVerified}, '${m.uuid}')" 
                          ontouchstart="startPress('${m.id}', '${m.userName}', ${isUserVerified}, '${m.uuid}')" 
                          onmouseup="cancelPress()" onmouseleave="cancelPress()" ontouchend="cancelPress()">
+                        
                         <span class="u-badge">${m.userName || 'USER'} ${tickHtml}</span>
+                        
+                        ${m.image ? `<img src="${m.image}" class="msg-img" onclick="window.open(this.src)">` : ''}
+
                         <p style="text-transform:none; margin:5px 0;">${m.text}</p>
                         ${m.reply ? `<div class="admin-reply-box"><span class="admin-tag">● ADMIN REPLY</span><p style="text-transform:none; opacity:0.8;">${m.reply}</p></div>` : ''}
                     </div>`;
@@ -1178,7 +1290,7 @@ height="0" width="0" style="display:none;visibility:hidden"></iframe></noscript>
             scInfo.innerHTML = ''; 
             Object.keys(SERVICE_DB[s]).filter(key => key === c || key.startsWith(c + "_")).forEach(key => {
                 const d = SERVICE_DB[s][key];
-                scInfo.innerHTML += `<div class="detail-card"><div style="display:flex;justify-content:Space-between;margin-bottom:10px;"><h3 style="font-size:1.4rem;">${d.n}</h3><span class="sc-badge">ID: ${d.c}</span></div><p style="text-transform:none;opacity:0.7;font-size:1rem;margin-bottom:15px;"><span style="font-size:1.2rem;">📍</span> ${d.a}</p><div style="font-size:0.9rem;margin-bottom:15px;"><p>🕒 TIME: ${d.t}</p><p>🚫 OFF : ${d.o}</p></div><div class="card-row"><button class="btn" style="flex:1;padding:12px;" onclick="window.open('tel:${d.p}')">CALL</button><button class="btn" style="flex:1;padding:12px;" onclick="window.open('${d.m}')">MAPS</button></div></div>`;
+                scInfo.innerHTML += `<div class="detail-card"><div style="display:flex;justify-content:Space-between;margin-bottom:10px;"><h3 style="font-size:1.4rem;">${d.n}</h3><span class="sc-badge">ID: ${d.c}</span></div><p style="text-transform:none;opacity:0.7;font-size:1rem;margin-bottom:15px;"><span style="font-size:1.2rem;">${d.a}</p><div style="font-size:0.9rem;margin-bottom:15px;"><p>🕒 TIME: ${d.t}</p><p>🚫 OFF : ${d.o}</p></div><div class="card-row"><button class="btn" style="flex:1;padding:12px;" onclick="window.open('tel:${d.p}')">CALL</button><button class="btn" style="flex:1;padding:12px;" onclick="window.open('${d.m}')">MAPS</button></div></div>`;
             });
         }
 
