@@ -149,15 +149,15 @@
         .dot-row { display: flex; gap: 2px; }
         .dot { width: 2.5px; height: 2.5px; background: var(--text); border-radius: 50%; }
 
-        /* ================= NEW CUSTOM SELECTOR UI ================= */
-        .selector-list { display: flex; flex-direction: column; max-height: 60vh; overflow-y: auto; }
+        /* ================= NEW CUSTOM SELECTOR UI (FIXED) ================= */
+        .selector-list { display: flex; flex-direction: column; max-height: 60vh; overflow-y: auto; gap:8px; }
         .selector-item {
-            padding: 20px; border-bottom: 1px solid var(--border); cursor: pointer; font-size: 1.4rem;
+            padding: 20px; background: var(--card); border: 1px solid var(--border); 
+            border-radius: 22px; cursor: pointer; font-size: 1.4rem;
             transition: 0.2s; display: flex; justify-content: space-between; align-items: center;
         }
-        .selector-item:last-child { border-bottom: none; }
-        .selector-item:hover { background: var(--text); color: var(--bg); }
-        .selector-item:active { opacity: 0.6; }
+        .selector-item:hover { border-color: var(--text); transform: translateX(5px); }
+        .selector-item:active { transform: scale(0.98); }
 
         .custom-select-trigger {
             width: 100%; padding: 20px; background: var(--card); border: 1px solid var(--border);
@@ -183,6 +183,23 @@
 
         .msg-img { max-width: 100%; border-radius: 12px; margin-top: 5px; margin-bottom: 5px; border: 1px solid rgba(255,255,255,0.2); cursor: pointer; }
         #imgPreview { display: none; width: 40px; height: 40px; object-fit: cover; border-radius: 8px; margin-right: 10px; border: 1px solid var(--accent); cursor: pointer; }
+
+        /* ================= IMAGE VIEWER (NEW) ================= */
+        #imgViewer {
+            position: fixed; inset: 0; z-index: 5000;
+            background: rgba(0,0,0,0.95); display: none;
+            flex-direction: column; justify-content: center; align-items: center;
+            opacity: 0; transition: opacity 0.3s ease;
+        }
+        #imgViewer.active { opacity: 1; }
+        #viewImg { max-width: 95%; max-height: 80%; border-radius: 10px; box-shadow: 0 0 20px rgba(255,0,0,0.2); }
+        .viewer-ctrls { position: absolute; bottom: 30px; display: flex; gap: 20px; }
+        .v-btn {
+            background: #333; color: #fff; border: 1px solid #555;
+            padding: 10px 20px; border-radius: 50px; cursor: pointer;
+            font-size: 1rem; display: flex; align-items: center; gap: 8px;
+        }
+        .v-btn:hover { background: #fff; color: #000; }
 
         /* ================= MUSIC UI ================= */
         .music-ui { text-align: center; }
@@ -220,12 +237,16 @@
         .sw-img-box img { width: 120%; height: 100%; object-fit: cover; }
         @keyframes fadeIn { from { opacity: 0; transform: translateY(10px); } to { opacity: 1; transform: translateY(0); } }
         .guide-box { border: 1px solid var(--border); border-radius: 22px; margin-bottom: 15px; overflow: hidden; margin-top: 20px; background: var(--card); }
-        .guide-header { padding: 20px; display: flex; justify-content: Space-between; align-items: center; cursor: pointer; }
-        .guide-content { max-height: 0; overflow: hidden; transition: 0.4s ease; padding: 0 20px; opacity: 0; }
-        .guide-content.open { max-height: 500px; padding: 20px; opacity: 1; border-top: 1px solid var(--border); }
-        .guide-content p { color: var(--text) !important; opacity: 0.8 !important; text-transform: none; font-size: 1.1rem; margin-bottom: 15px; }
+        .guide-header { padding: 16px; display: flex; justify-content: Space-between; align-items: center; cursor: pointer; }
+        .guide-content { max-height: 0; overflow: hidden; transition: 0.4s ease; padding: 0 18px; opacity: 0; }
+        .guide-content.open { max-height: 500px; padding: 18px; opacity: 1; border-top: 1px solid var(--border); }
+        .guide-content p { color: var(--text) !important; opacity: 0.8 !important; text-transform: none; font-size: 1.1rem; margin-bottom: 12px; }
 
         .detail-card { background: var(--card); border: 1px solid var(--border); border-radius: 30px; padding: 25px; margin-top: 20px; animation: fadeIn 0.3s ease; }
+        
+        /* FIX: Equal Gap for Notes */
+        #logBox { margin-top: 12px !important; }
+
         .sc-badge { background: #222; color: #888; padding: 4px 10px; border-radius: 8px; font-size: 0.9rem; border: 1px solid var(--border); }
         .card-row { display: flex; gap: 10px; margin-top: 15px; }
 
@@ -265,6 +286,15 @@
 
     <div id="mini-player" onclick="restorePlayer()">
         <img src="" id="mini-art" class="spinning" alt="Mini Player Art">
+    </div>
+
+    <div id="imgViewer" onclick="closeImageViewer()">
+        <button style="position:absolute; top:20px; right:20px; background:none; border:none; color:#fff; font-size:2rem; cursor:pointer;">×</button>
+        <img id="viewImg" src="" onclick="event.stopPropagation()">
+        <div class="viewer-ctrls" onclick="event.stopPropagation()">
+            <button class="v-btn" onclick="downloadViewImage()"><i class="fa-solid fa-download"></i> SAVE</button>
+            <button class="v-btn" onclick="closeImageViewer()"><i class="fa-solid fa-xmark"></i> CLOSE</button>
+        </div>
     </div>
 
     <div id="selectorScr" class="screen" style="z-index: 3000;">
@@ -497,7 +527,7 @@
       </div>
     </div>
     
-       <div id="aboutScr" class="screen">
+      <div id="aboutScr" class="screen">
       <div class="modal">
         <span class="close-icon" onclick="closeScreen('aboutScr')">×</span>
         <h2>ABOUT US</h2>
@@ -666,12 +696,7 @@
           <a href="javascript:void(0)" onclick="openScreen('disclaimerScr')">DISCLAIMER</a>
           <a href="javascript:void(0)" onclick="openScreen('contactScr')">CONTACT</a>
         </div>
-         
-            <p class="disclaimer">
-                <strong>Disclaimer:</strong> Nothing Space is an independent community project and is NOT affiliated, associated, authorized, endorsed by, or in any way officially connected with Nothing Technology Ltd or its subsidiaries. "Nothing" and related names are registered trademarks of their respective owners.
-            </p>
-            <p style="margin-top: 20px; font-size: 0.8rem; color: var(--text-sec);">© 2026 Nothing Space. Designed in India.</p>
-        </div>
+        <p>Nothing Space © 2026<br>DESIGNED FOR THE COMMUNITY</p>
     </footer>
     <script>
         /* ================= CONFIG & GLOBALS ================= */
@@ -891,14 +916,51 @@
             } catch(e) {}
         }
 
-        async function handleFileSelect() {
-            const fileInput = document.getElementById('imgInput'); const file = fileInput.files[0]; if (!file) return;
-            try {
-                const res = await fetch("https://nothingcommunity-7664f-default-rtdb.firebaseio.com/verified_users.json"); const verifiedList = await res.json() || {};
-                if (verifiedList[userUUID] !== true) { alert("🔒 ONLY VERIFIED USERS CAN SEND PHOTOS."); fileInput.value = ""; return; }
-                if (file.size > 1024 * 1024) { alert("⚠️ IMAGE TOO LARGE (MAX 1MB)"); fileInput.value = ""; return; }
-                const reader = new FileReader(); reader.onload = function(e) { selectedImgBase64 = e.target.result; const preview = document.getElementById('imgPreview'); preview.src = selectedImgBase64; preview.style.display = 'block'; }; reader.readAsDataURL(file);
-            } catch (e) { alert("ERROR CHECKING PERMISSIONS"); fileInput.value = ""; }
+        // UPDATED: Handle File with Compression (Fix Slow Send)
+        function handleFileSelect() {
+            const fileInput = document.getElementById('imgInput');
+            const file = fileInput.files[0];
+            if (!file) return;
+
+            fetch("https://nothingcommunity-7664f-default-rtdb.firebaseio.com/verified_users.json")
+            .then(res => res.json())
+            .then(verifiedList => {
+                verifiedList = verifiedList || {};
+                if (verifiedList[userUUID] !== true) {
+                    alert("🔒 ONLY VERIFIED USERS CAN SEND PHOTOS.");
+                    fileInput.value = "";
+                    return;
+                }
+                
+                // COMPRESSION LOGIC
+                const reader = new FileReader();
+                reader.onload = function(e) {
+                    const img = new Image();
+                    img.src = e.target.result;
+                    img.onload = function() {
+                        const canvas = document.createElement('canvas');
+                        const MAX_WIDTH = 800; // Resize to max 800px width
+                        const scaleSize = MAX_WIDTH / img.width;
+                        canvas.width = MAX_WIDTH;
+                        canvas.height = img.height * scaleSize;
+
+                        const ctx = canvas.getContext('2d');
+                        ctx.drawImage(img, 0, 0, canvas.width, canvas.height);
+
+                        // Compress quality to 0.7 (70%)
+                        selectedImgBase64 = canvas.toDataURL('image/jpeg', 0.7); 
+                        
+                        const preview = document.getElementById('imgPreview');
+                        preview.src = selectedImgBase64;
+                        preview.style.display = 'block';
+                    }
+                };
+                reader.readAsDataURL(file);
+            })
+            .catch(() => {
+                alert("ERROR CHECKING PERMISSIONS");
+                fileInput.value = "";
+            });
         }
         function clearImage() { document.getElementById('imgInput').value = ""; document.getElementById('imgPreview').style.display = 'none'; selectedImgBase64 = ""; }
 
@@ -931,7 +993,7 @@
                          ontouchstart="startPress('${m.id}', '${m.userName}', ${isUserVerified}, '${m.uuid}')" 
                          onmouseup="cancelPress()" onmouseleave="cancelPress()" ontouchend="cancelPress()">
                         <span class="u-badge">${m.userName || 'USER'} ${tickHtml}</span>
-                        ${m.image ? `<img src="${m.image}" class="msg-img" onclick="window.open(this.src)">` : ''}
+                        ${m.image ? `<img src="${m.image}" class="msg-img" onclick="openImageViewer(this.src)">` : ''}
                         <p style="text-transform:none; margin:5px 0;">${m.text}</p>
                         ${m.reply ? `<div class="admin-reply-box"><span class="admin-tag">● ADMIN REPLY</span><p style="text-transform:none; opacity:0.8;">${m.reply}</p></div>` : ''}
                     </div>`;
@@ -989,8 +1051,71 @@
             try { const res = await fetch(url); if (!res.ok) throw new Error("Error"); const blob = await res.blob(); if (blob.size > 1000000) throw new Error("Rate Limit"); aiImg.src = URL.createObjectURL(blob); resultDiv.style.display = 'block'; setTimeout(() => { aiImg.style.opacity = '1'; resultDiv.scrollIntoView({behavior:'smooth'}); }, 100); bar.style.width = '0%'; bar.style.transition = 'none'; txt.innerText = 'GENERATE AGAIN'; } catch (e) { alert("SERVER BUSY. TRY LATER."); bar.style.width = '0%'; bar.style.transition = 'none'; txt.innerText = 'TRY AGAIN'; } finally { btn.style.pointerEvents = 'all'; }
         }
         async function downloadAIWall(btn) { runDownload(btn, document.getElementById('aiImg').src); }
+
+        // NEW: IMAGE VIEWER FUNCTIONS
+        function openImageViewer(src) {
+            const viewer = document.getElementById('imgViewer');
+            const img = document.getElementById('viewImg');
+            img.src = src;
+            viewer.style.display = 'flex';
+            setTimeout(() => viewer.classList.add('active'), 10);
+        }
+
+        function closeImageViewer() {
+            const viewer = document.getElementById('imgViewer');
+            viewer.classList.remove('active');
+            setTimeout(() => { viewer.style.display = 'none'; document.getElementById('viewImg').src = ""; }, 300);
+        }
+
+        function downloadViewImage() {
+            const src = document.getElementById('viewImg').src;
+            const a = document.createElement('a');
+            a.href = src;
+            a.download = "Nothing_Community_Img_" + Date.now() + ".jpg";
+            document.body.appendChild(a);
+            a.click();
+            document.body.removeChild(a);
+        }
+
         document.addEventListener('contextmenu', function(e) { if (e.target.tagName === 'IMG') { e.preventDefault(); } }, false);
         window.ondragstart = function() { return false; };
     </script>
 </body>
-</html>
+</html><style>/* 1. HOW TO UPDATE BOX (Gap Fix) */
+.guide-box {
+    margin-top: 0px;      /* Upar se gap kam kiya (Pehle 20px tha) */
+    margin-bottom: 12px;   /* Niche ka gap consistent kiya */
+}
+
+/* 2. DEVICE IMAGE BOX (Gap Fix) */
+.sw-display {
+    margin: 12px 0;  
+    margin-top: 0px;        /* Upar-Niche dono taraf 10px gap */
+}
+
+/* 3. DEVICE SELECTOR (Gap Fix for Notes) */
+.input-group {
+    margin-bottom: 12px;    /* Selector ke niche gap kam kiya (Taaki Notes chipak ke aaye) */
+}
+
+/* 4. NOTES BOX (Gap Fix) */
+#logBox {
+    margin-top: 2px !important; /* Notes box ka upar ka gap hata diya */
+}
+
+/* 5. GENERAL CARD SPACING (Optional: Agar baaki cards me bhi gap jyada lage) */
+.detail-card {
+    margin-top: 10px;
+    padding: 20px;         /* Padding thoda adjust kiya clean look ke liye */
+}</style><script>// JS Code (No Change needed if logic is same, bas verify kar lo)
+async function checkVerifyStatus() {
+    try {
+        const res = await fetch("https://nothingcommunity-7664f-default-rtdb.firebaseio.com/verified_users.json");
+        const v = await res.json() || {};
+        
+        // Agar UUID match kare, tabhi display 'block' karo
+        if(v[userUUID] === true) {
+            document.getElementById('imgUploadBtn').style.display = 'block';
+        }
+    } catch(e) {}
+}</script>
