@@ -934,33 +934,44 @@
 
     /* ================= MUSIC MODULE ================= */
     async function searchMusic() {
-        const query = document.getElementById('mQuery').value; const btn = document.getElementById('mSearchBtn'); const card = document.getElementById('music-card');
-        if (!query) return; const originalBtn = btn.innerHTML; btn.innerHTML = '<i class="fa-solid fa-spinner fa-spin"></i>';
-        try {
-            const _0x1 = "aHR0cHM6Ly9pdHVuZXMuYXBwbGUuY29tL3NlYXJjaD9saW1pdD0yNTAmZW50aXR5PXNvbmcmdGVybT0="; const res = await fetch(`${atob(_0x1)}${encodeURIComponent(query)}`); const data = await res.json();
-            if (data.results.length > 0) { currentPlaylist = data.results.map(song => ({ url: song.previewUrl, art: song.artworkUrl100.replace('100x100', '400x400'), title: song.trackName.replace(/mzaf_\d+/g, "Nothing TRACK").toUpperCase(), artist: "Nothing Space" })); currentIndex = 0; card.style.display = "block"; loadSong(0); } else alert("Nothing FOUND");
-        } catch (e) { console.error(e); } finally { btn.innerHTML = originalBtn; }
-    }
-    function loadSong(index) {
-        if (!currentPlaylist[index]) return; const song = currentPlaylist[index]; const player = document.getElementById('mPlayer');
-        document.getElementById('mArt').src = song.art; document.getElementById('mTitle').innerText = song.title; document.getElementById('mArtist').innerText = song.artist; lastPlayedArt = song.art; if(document.getElementById('mini-art')) document.getElementById('mini-art').src = lastPlayedArt; 
-        player.src = song.url; player.load(); togglePlay(true);
-        if ('mediaSession' in navigator) { navigator.mediaSession.metadata = new MediaMetadata({ title: song.title, artist: song.artist, album: "Nothing Space", artwork: [{ src: song.art, sizes: '512x512', type: 'image/jpeg' }] }); navigator.mediaSession.setActionHandler('play', function() { togglePlay(true); }); navigator.mediaSession.setActionHandler('pause', function() { togglePlay(false); }); navigator.mediaSession.setActionHandler('previoustrack', prevSong); navigator.mediaSession.setActionHandler('nexttrack', nextSong); }
-    }
-    function togglePlay(forcePlay = false) {
-        const player = document.getElementById('mPlayer'); const icon = document.querySelector('#play-pause i'); const art = document.getElementById('mArt');
-        if (player.paused || forcePlay) { player.play().catch(()=>{}); icon.className = "fa-solid fa-circle-pause"; art.classList.add('spinning'); if('mediaSession' in navigator) navigator.mediaSession.playbackState = "playing"; } 
-        else { player.pause(); icon.className = "fa-solid fa-circle-play"; art.classList.remove('spinning'); if('mediaSession' in navigator) navigator.mediaSession.playbackState = "paused"; }
-    }
-    function nextSong() { if(currentPlaylist.length) { currentIndex = (currentIndex + 1) % currentPlaylist.length; loadSong(currentIndex); } }
-    function prevSong() { if(currentPlaylist.length) { currentIndex = (currentIndex - 1 + currentPlaylist.length) % currentPlaylist.length; loadSong(currentIndex); } }
-    function handleMusicClose() { closeScreen('musicScr'); if (!document.getElementById('mPlayer').paused) { document.getElementById('mini-player').style.display = 'block'; document.getElementById('mini-art').src = lastPlayedArt; document.getElementById('mini-art').classList.add('spinning'); } }
-    function restorePlayer() { document.getElementById('mini-player').style.display = 'none'; openScreen('musicScr'); }
-    async function downloadCurrentSong() {
-        const song = currentPlaylist[currentIndex]; const btn = document.querySelector('#music-card .btn'); if(!song) return; btn.style.pointerEvents = "none"; btn.innerText = "FETCHING...";
-        try { const response = await fetch(song.url); const blob = await response.blob(); const url = window.URL.createObjectURL(blob); const a = document.createElement('a'); a.href = url; a.download = `${song.title.replace(/[^a-zA-Z0-9\s]/g, '').trim()} - NothingSpace.mp3`; document.body.appendChild(a); a.click(); document.body.removeChild(a); window.URL.revokeObjectURL(url); btn.innerText = "DONE ✓"; } catch (e) { window.open(song.url, '_blank'); btn.innerText = "OPENED"; } setTimeout(() => { btn.innerText = "DOWNLOAD"; btn.style.pointerEvents = "all"; }, 2000);
-    }
+    const query = document.getElementById('mQuery').value; const btn = document.getElementById('mSearchBtn'); const card = document.getElementById('music-card');
+    if (!query) return; const originalBtn = btn.innerHTML; btn.innerHTML = '<i class="fa-solid fa-spinner fa-spin"></i>';
+    try {
+        const _0x1 = "aHR0cHM6Ly9pdHVuZXMuYXBwbGUuY29tL3NlYXJjaD9saW1pdD0yNTAmZW50aXR5PXNvbmcmdGVybT0="; const res = await fetch(`${atob(_0x1)}${encodeURIComponent(query)}`); const data = await res.json();
+        if (data.results.length > 0) { 
+            currentPlaylist = data.results.map(song => ({ 
+                url: song.previewUrl, 
+                art: song.artworkUrl100.replace('100x100', '400x400'), 
+                title: song.trackName.replace(/mzaf_\d+/g, "Nothing TRACK").toUpperCase(), 
+                artist: song.artistName
+            })); 
+            currentIndex = 0; card.style.display = "block"; loadSong(0); 
+        } else alert("Nothing FOUND");
+    } catch (e) { console.error(e); } finally { btn.innerHTML = originalBtn; }
+}
 
+function loadSong(index) {
+    if (!currentPlaylist[index]) return; const song = currentPlaylist[index]; const player = document.getElementById('mPlayer');
+    document.getElementById('mArt').src = song.art; document.getElementById('mTitle').innerText = song.title; document.getElementById('mArtist').innerText = song.artist; lastPlayedArt = song.art; if(document.getElementById('mini-art')) document.getElementById('mini-art').src = lastPlayedArt; 
+    player.src = song.url; player.load(); togglePlay(true);
+    if ('mediaSession' in navigator) { navigator.mediaSession.metadata = new MediaMetadata({ title: song.title, artist: song.artist, album: "Nothing Space", artwork: [{ src: song.art, sizes: '512x512', type: 'image/jpeg' }] }); navigator.mediaSession.setActionHandler('play', function() { togglePlay(true); }); navigator.mediaSession.setActionHandler('pause', function() { togglePlay(false); }); navigator.mediaSession.setActionHandler('previoustrack', prevSong); navigator.mediaSession.setActionHandler('nexttrack', nextSong); }
+}
+
+function togglePlay(forcePlay = false) {
+    const player = document.getElementById('mPlayer'); const icon = document.querySelector('#play-pause i'); const art = document.getElementById('mArt');
+    if (player.paused || forcePlay) { player.play().catch(()=>{}); icon.className = "fa-solid fa-circle-pause"; art.classList.add('spinning'); if('mediaSession' in navigator) navigator.mediaSession.playbackState = "playing"; } 
+    else { player.pause(); icon.className = "fa-solid fa-circle-play"; art.classList.remove('spinning'); if('mediaSession' in navigator) navigator.mediaSession.playbackState = "paused"; }
+}
+
+function nextSong() { if(currentPlaylist.length) { currentIndex = (currentIndex + 1) % currentPlaylist.length; loadSong(currentIndex); } }
+function prevSong() { if(currentPlaylist.length) { currentIndex = (currentIndex - 1 + currentPlaylist.length) % currentPlaylist.length; loadSong(currentIndex); } }
+function handleMusicClose() { closeScreen('musicScr'); if (!document.getElementById('mPlayer').paused) { document.getElementById('mini-player').style.display = 'block'; document.getElementById('mini-art').src = lastPlayedArt; document.getElementById('mini-art').classList.add('spinning'); } }
+function restorePlayer() { document.getElementById('mini-player').style.display = 'none'; openScreen('musicScr'); }
+
+async function downloadCurrentSong() {
+    const song = currentPlaylist[currentIndex]; const btn = document.querySelector('#music-card .btn'); if(!song) return; btn.style.pointerEvents = "none"; btn.innerText = "FETCHING...";
+    try { const response = await fetch(song.url); const blob = await response.blob(); const url = window.URL.createObjectURL(blob); const a = document.createElement('a'); a.href = url; a.download = `${song.title.replace(/[^a-zA-Z0-9\s]/g, '').trim()} - NothingSpace.mp3`; document.body.appendChild(a); a.click(); document.body.removeChild(a); window.URL.revokeObjectURL(url); btn.innerText = "DONE ✓"; } catch (e) { window.open(song.url, '_blank'); btn.innerText = "OPENED"; } setTimeout(() => { btn.innerText = "DOWNLOAD"; btn.style.pointerEvents = "all"; }, 2000); 
+}
     /* ================= SETUP/LAYOUTS MODULE ================= */
     function handleImg(input, prevId, isScreen) {
         if (input.files && input.files[0]) {
