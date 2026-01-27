@@ -147,13 +147,41 @@
     .dot-row { display: flex; gap: 2px; }
     .dot { width: 2.5px; height: 2.5px; background: var(--text); border-radius: 50%; }
 
-    /* ================= SETUP MODULE CSS ================= */
-    .setup-card { background: var(--card); border: 1px solid var(--border); border-radius: 30px; padding: 20px; margin-bottom: 25px; }
+    /* ================= SETUP MODULE CSS (3D SCROLL & SHRINK) ================= */
+    .setup-grid-container {
+        padding-top: 20px; /* Spacer for 3D feel */
+        padding-bottom: 30px;
+    }
+
+    .setup-card { 
+        background: var(--card); 
+        border: 1px solid var(--border); 
+        border-radius: 30px; 
+        padding: 25px; 
+        margin-bottom: 0px; 
+        
+        /* 3D Animation Properties */
+        transition: transform 0.4s cubic-bezier(0.25, 0.8, 0.25, 1), opacity 0.4s ease, filter 0.4s ease;
+        transform: scale(0.85); /* Default Small */
+        opacity: 0.4; /* Default Faded */
+        filter: blur(2px);
+        transform-origin: center center;
+    }
+    
+    /* Active State for Center Card */
+    .setup-card.in-focus {
+        transform: scale(1);
+        opacity: 1;
+        filter: blur(0px);
+        border-color: var(--text);
+        z-index: 10;
+    }
+
     .setup-header { display: flex; justify-content: space-between; align-items: center; margin-bottom: 15px; border-bottom: 1px solid #333; padding-bottom: 10px; }
     .phone-showcase { display: flex; justify-content: center; gap: 15px; margin-bottom: 15px; }
     .phone-frame { width: 48%; aspect-ratio: 9/19; background: #000; border-radius: 18px; border: 2px solid #333; overflow: hidden; cursor: pointer; transition: 0.2s; }
     .phone-frame.active { border-color: var(--accent); transform: scale(1.02); }
-    .phone-frame img { width: 100%; height: 100%; object-fit: contain; }
+    .phone-frame img { width: 100%; height: 100%; }
     .dl-btn { width: 100%; background: var(--text); color: var(--bg); border: none; padding: 12px; border-radius: 12px; font-weight: bold; display: none; margin-top: 10px; cursor: pointer; }
     .upload-box { background: var(--card); padding: 20px; border-radius: 20px; border: 1px solid var(--border); margin-bottom: 20px; }
     .upload-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 10px; margin-bottom: 10px; }
@@ -809,6 +837,7 @@
     };
     const DB_URL = "https://nothingcommunity-7664f-default-rtdb.firebaseio.com/chat.json";
     const SETUP_DB_URL = "https://nothingcommunity-7664f-default-rtdb.firebaseio.com/setups.json";
+    const ADMIN_UUID = "uid_mkavtib3ssewb0pf1cj";
     
     let SERVICE_DB = {}; 
     let currentPlaylist = [], currentIndex = 0, lastPlayedArt = "";
@@ -960,9 +989,12 @@
             scInfo.innerHTML += `<div class="detail-card"><div style="display:flex;justify-content:space-between;margin-bottom:10px;"><h3 style="font-size:1.4rem;">${d.n}</h3><span class="sc-badge">ID: ${d.c}</span></div><p style="text-transform:none;opacity:0.7;font-size:1rem;margin-bottom:15px;"><span style="font-size:1.2rem;">${d.a}</p><div style="font-size:0.9rem;margin-bottom:15px;"><p>🕒 TIME: ${d.t}</p><p>🚫 OFF : ${d.o}</p></div><div class="card-row"><button class="btn" style="flex:1;padding:12px;" onclick="window.open('tel:${d.p}')">CALL</button><button class="btn" style="flex:1;padding:12px;" onclick="window.open('${d.m}')">MAPS</button></div></div>`;
         });
     }
-    let sw_timer; function startSoftwareLogic() { sw_timer = setTimeout(() => { if(navigator.vibrate) navigator.vibrate(50); openSoftwareMenu(); }, 6500); }
+    let sw_timer; function startSoftwareLogic() { sw_timer = setTimeout(() => { if(navigator.vibrate) navigator.vibrate(50); openSoftwareMenu(); }, 500); }
     function cancelSoftwareLogic() { clearTimeout(sw_timer); }
     async function openSoftwareMenu() {
+        // ADMIN CHECK FOR SOFTWARE TRIGGER
+        if(userUUID !== ADMIN_UUID) return; 
+
         const id = document.getElementById('swSelect').value; const pass = prompt("🔐 SOFTWARE ADMIN PASSWORD:");
         if(stringToHash(pass) === "1540218401") {
             if(!id) { if(confirm("🆕 ADD NEW DEVICE?")) { const newId = prompt("Unique ID:"); if(!newId) return; const payload = { disp: prompt("Name:"), img: prompt("Img URL:"), url: prompt("Zip Link:"), logs: [prompt("Note:")] }; await fetch(`https://nothingsoftware-3cc7c-default-rtdb.firebaseio.com/software_data/${newId}.json`, {method:'PUT', body:JSON.stringify(payload)}); alert("ADDED!"); initSoftwareData(); } return; }
@@ -1083,20 +1115,32 @@
             alert("FAIL"); btn.innerText = "RETRY"; btn.style.pointerEvents = "all";
         }
     }
+
+    /* --- UPDATED SETUP LOADING WITH 3D EFFECT & DELETE LOGIC --- */
     async function loadSetups() {
         const grid = document.getElementById('setupGrid');
+        const modal = document.querySelector('#setupScr .modal'); 
+
         try {
             const res = await fetch(SETUP_DB_URL);
             const data = await res.json();
-            if(!data) { grid.innerHTML = "<p style='text-align:center'>NO SETUPS YET</p>"; return; }
+            
+            if(!data) { 
+                grid.innerHTML = "<p style='text-align:center'>NO SETUPS YET</p>"; 
+                return; 
+            }
             
             const list = Object.keys(data).map(k => ({id:k, ...data[k]}));
             list.sort((a,b) => (b.likes||0) - (a.likes||0)); 
 
             grid.innerHTML = list.map(p => {
                 const isMine = p.uuid === userUUID;
+                const isAdmin = userUUID === ADMIN_UUID;
                 const liked = localStorage.getItem('l_'+p.id) ? 'liked' : '';
                 const displayName = p.author ? p.author : (isMine ? 'YOU' : 'USER');
+
+                // Logic: Show delete if it is mine OR I am Admin
+                const showDelete = isMine || isAdmin; 
 
                 return `
                 <div class="setup-card">
@@ -1116,21 +1160,73 @@
                         <button class="like-btn ${liked}" onclick="doLike('${p.id}', ${p.likes||0}, this)">
                             <i class="fa-solid fa-heart"></i> <span>${p.likes||0}</span>
                         </button>
-                        ${isMine ? `<div onclick="deleteSetup('${p.id}', '${p.uuid}')" style="cursor:pointer; padding:5px;"><i class="fa-solid fa-trash" style="opacity:0.5;"></i></div>` : ''}
+                        
+                        ${showDelete ? `
+                            <div onclick="deleteSetup('${p.id}', '${p.uuid}')" style="cursor:pointer; padding:8px; background:rgba(255,0,0,0.1); border-radius:8px;">
+                                <i class="fa-solid fa-trash" style="color:#ff4444;"></i>
+                            </div>` 
+                        : ''}
                     </div>
                 </div>`;
             }).join('');
-        } catch(e) { grid.innerHTML = "<p style='text-align:center'>ERROR LOADING</p>"; }
+
+            // Attach the 3D Scroll Effect
+            setTimeout(() => {
+                attachFocusScroll(modal);
+            }, 200);
+
+        } catch(e) { 
+            console.error(e);
+            grid.innerHTML = "<p style='text-align:center'>ERROR LOADING</p>"; 
+        }
+    }
+
+    /* --- NEW 3D SCROLL EFFECT LOGIC (Fade + Shrink) --- */
+    function attachFocusScroll(modal) {
+        if(!modal) return;
+
+        const handleScroll = () => {
+            const cards = document.querySelectorAll('.setup-card');
+            const modalCenter = modal.getBoundingClientRect().top + (modal.clientHeight / 2);
+
+            cards.forEach(card => {
+                const rect = card.getBoundingClientRect();
+                const cardCenter = rect.top + (rect.height / 2);
+                const dist = Math.abs(modalCenter - cardCenter);
+                
+                // If card is near center (200px range), focus it. Else shrink it.
+                if (dist < 200) {
+                    card.classList.add('in-focus');
+                } else {
+                    card.classList.remove('in-focus');
+                }
+            });
+        };
+
+        modal.removeEventListener('scroll', handleScroll); 
+        modal.addEventListener('scroll', handleScroll);
+        
+        // Initial Check
+        handleScroll();
     }
 
     async function deleteSetup(id, postUUID) {
         const isMine = postUUID === userUUID;
-        if (isMine) {
-            if(confirm("DELETE YOUR SETUP?")) await performDelete(id);
-        } else {
-            const pass = prompt("ADMIN PASSWORD:");
-            if(stringToHash(pass) === "1540218370") await performDelete(id);
-            else if (pass) alert("WRONG PASSWORD");
+        const isAdmin = userUUID === ADMIN_UUID;
+
+        if (isAdmin) {
+             // Admin Logic: Needs Password
+             const pass = prompt("ADMIN PASSWORD:");
+             if (stringToHash(pass) === "1540218370") {
+                await performDelete(id);
+             } else {
+                alert("WRONG PASSWORD");
+             }
+        } else if (isMine) {
+            // User Logic: Simple Confirm
+            if(confirm("DELETE YOUR SETUP?")) {
+                await performDelete(id);
+            }
         }
     }
 
@@ -1314,9 +1410,9 @@
                     const replyId = m.quoted.id || ''; 
                     const clickAction = replyId ? `onclick="event.stopPropagation(); scrollToMsg('${replyId}')"` : '';
                     quotedHtml = `<div class="quoted-block" ${clickAction} style="${replyId ? 'cursor:pointer;' : ''}">
-                                    <span class="q-name">${m.quoted.name}</span>
-                                    <span class="q-text">${m.quoted.text}</span>
-                                  </div>`; 
+                                        <span class="q-name">${m.quoted.name}</span>
+                                        <span class="q-text">${m.quoted.text}</span>
+                                      </div>`; 
                 }
 
                 return `
@@ -1350,13 +1446,16 @@
     let adminTapTimer;
 
     function handleAdminTap(event, id, name, verified, uuid) {
-        event.stopPropagation(); // Bubble par click hone se rokne ke liye
+        event.stopPropagation(); 
+
+        // STRICT ADMIN CHECK HERE
+        if (userUUID !== ADMIN_UUID) return;
 
         adminTapCount++;
         
         clearTimeout(adminTapTimer);
 
-        if (adminTapCount === 4) {
+        if (adminTapCount === 2) {
             adminTapCount = 0; 
             if (navigator.vibrate) navigator.vibrate([50, 50, 50]); 
             adminControl(id, name, verified, uuid); 
