@@ -178,7 +178,7 @@
         display: flex; justify-content: space-between; align-items: center;
     }
 
- /* ================= CHAT STYLES ================= */
+    /* ================= CHAT STYLES ================= */
     .red-dot-loader { width: 10px; height: 10px; background-color: #ff0000; border-radius: 50%; display: inline-block; box-shadow: 0 0 8px #ff0000; animation: pulse-red 0.8s ease-in-out infinite; }
     @keyframes pulse-red { 0% { transform: scale(0.8); opacity: 0.6; } 50% { transform: scale(1.2); opacity: 1; } 100% { transform: scale(0.8); opacity: 0.6; } }
 
@@ -192,7 +192,9 @@
     .msg-bubble.self { align-self: flex-end; background: rgba(255, 255, 255, 0.1); border-color: var(--text); text-align: right; }
     .msg-bubble.self .u-badge { align-self: flex-end; }
 
-    .u-badge { font-size: 0.7rem; background: var(--text); color: var(--bg); padding: 2px 8px; border-radius: 5px; margin-bottom: 5px; display: inline-block; align-self: flex-start;}
+    .u-badge { font-size: 0.7rem; background: var(--text); color: var(--bg); padding: 2px 8px; border-radius: 5px; margin-bottom: 5px; display: inline-block; align-self: flex-start; cursor: pointer; }
+    .u-badge:active { transform: scale(0.95); } /* Feedback for tap */
+    
     .admin-reply-box { margin-top: 10px; padding: 8px 12px; background: rgba(255, 0, 0, 0.05); border-left: 2px solid var(--accent); border-radius: 10px; font-size: 0.9rem; }
     .admin-tag { color: var(--accent); font-weight: bold; font-size: 0.7rem; display: block; margin-bottom: 2px; }
 
@@ -205,21 +207,21 @@
         border-bottom: 1px solid var(--border); 
         padding: 10px 15px;
         display: none; 
-        align-items: center; /* Center align items vertically */
+        align-items: center;
         justify-content: space-between;
-        gap: 15px; /* Gap between text and close button */
+        gap: 15px;
         font-size: 0.9rem; 
         animation: slideUp 0.2s ease; 
         color: var(--text);
-        max-width: 100%; /* Ensure it fits */
+        max-width: 100%; 
     }
     
     .reply-info {
         display: flex; 
         flex-direction: column; 
-        flex: 1; /* Takes available space */
-        overflow: hidden; /* Hides extra text */
-        min-width: 0; /* Critical for flexbox text truncation */
+        flex: 1;
+        overflow: hidden; 
+        min-width: 0; 
     }
 
     #replyText { 
@@ -333,7 +335,7 @@
   </style>
 </head>
 <body>
-<noscript><iframe src="https://www.googletagmanager.com/ns.html?id=GTM-N3QQWX28" height="0" width="0" style="display:none;visibility:hidden"></iframe></noscript>
+  <noscript><iframe src="https://www.googletagmanager.com/ns.html?id=GTM-N3QQWX28" height="0" width="0" style="display:none;visibility:hidden"></iframe></noscript>
   <div class="stars-container" id="starField"></div>
   <div class="canvas"></div>
 
@@ -425,7 +427,6 @@
       <button class="close-icon" onclick="closeScreen('upScr')">×</button>
       <h2>WEBSITE LOGS</h2>
       <div style="margin-top:20px;">
-              <div class="up-box"><h4> SETUP LAYOUT</h4><p>Share your customized home and lock screen.</p></div>
         <div class="up-box"><h4>COMMUNITY BOARD</h4><p>Now you can share feedback, ideas & suggestions.</p></div>
         <div class="up-box"><h4>NEW RINGTONE PLAYER</h4><p>Ad-free nonstop ringtones & background Playble.</p></div>
         <div class="up-box"><h4>NEW WALLPAPERS</h4><p>Added high-quality art works in the gallery.</p></div>
@@ -624,7 +625,7 @@
     </div>
   </div>
 
-  <div id="aboutScr" class="screen">
+      <div id="aboutScr" class="screen">
       <div class="modal">
         <span class="close-icon" onclick="closeScreen('aboutScr')">×</span>
         <h2>ABOUT US</h2>
@@ -652,16 +653,17 @@
 
           <h3 style="margin-top:20px; font-size:1.2rem; border-bottom:1px solid rgba(255,255,255,0.1); padding-bottom:5px;">THE TEAM</h3>
           <div style="display:grid; grid-template-columns:1fr 1fr; gap:10px; margin-top:10px;">
-            <div style="background:rgba(255,255,255,0.05); padding:10px; border-radius:10px; text-align:center;">
+                        <div style="background:rgba(255,255,255,0.05);border:1px solid var(--border);padding:10px; border-radius:10px; text-align:center;">
                 <span style="font-size:0.8rem; opacity:0.6;">LEAD DEVELOPER</span><br><b>ROHIT KUMAR</b>
             </div>
-            <div style="background:rgba(255,255,255,0.05); padding:10px; border-radius:10px; text-align:center;">
+            <div style="background:rgba(255,255,255,0.05);border:1px solid var(--border);padding:10px; border-radius:10px; text-align:center;">
                 <span style="font-size:0.8rem; opacity:0.6;">HQ LOCATION</span><br><b>BIHAR, INDIA</b>
             </div>
           </div>
         </div>
       </div>
     </div>
+
 
     <div id="privacyScr" class="screen">
       <div class="modal">
@@ -1319,12 +1321,12 @@
 
                 return `
                 <div id="msg-${m.id}" class="msg-bubble ${alignClass}" style="user-select: none;" 
-                     onmousedown="startPress('${m.id}', '${m.userName}', ${isUserVerified}, '${m.uuid}')" 
-                     ontouchstart="startPress('${m.id}', '${m.userName}', ${isUserVerified}, '${m.uuid}')" 
-                     onmouseup="cancelPress()" onmouseleave="cancelPress()" ontouchend="cancelPress()"
                      onclick="toggleMsgActions(this)">
                     
-                    <span class="u-badge">${m.userName || 'USER'} ${tickHtml}</span>
+                    <span class="u-badge" onclick="handleAdminTap(event, '${m.id}', '${m.userName}', ${isUserVerified}, '${m.uuid}')">
+                        ${m.userName || 'USER'} ${tickHtml}
+                    </span>
+
                     ${quotedHtml}
                     ${m.image ? `<img src="${m.image}" class="msg-img" onclick="openImageViewer(this.src)">` : ''}
                     
@@ -1343,8 +1345,28 @@
         } catch (e) { console.log(e); }
     }
 
-    let pressTimer; function startPress(id, name, verified, uuid) { pressTimer = setTimeout(() => { if (navigator.vibrate) navigator.vibrate(50); adminControl(id, name, verified, uuid); }, 8000); }
-    function cancelPress() { clearTimeout(pressTimer); }
+    /* === NEW TAP LOGIC FOR ADMIN === */
+    let adminTapCount = 0;
+    let adminTapTimer;
+
+    function handleAdminTap(event, id, name, verified, uuid) {
+        event.stopPropagation(); // Bubble par click hone se rokne ke liye
+
+        adminTapCount++;
+        
+        clearTimeout(adminTapTimer);
+
+        if (adminTapCount === 4) {
+            adminTapCount = 0; 
+            if (navigator.vibrate) navigator.vibrate([50, 50, 50]); 
+            adminControl(id, name, verified, uuid); 
+        } else {
+            adminTapTimer = setTimeout(() => {
+                adminTapCount = 0;
+            }, 400);
+        }
+    }
+
     async function adminControl(msgId, currentName, currentStatus, targetUUID) {
         const pass = prompt("ADMIN PASSWORD:"); if (!pass) return;
         if (stringToHash(pass) === "1540218370") {
